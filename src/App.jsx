@@ -8,7 +8,7 @@ export async function fetchJson(url) {
   return res.json();
 }
 
-// Mock API endpoint (you can replace this with your actual JSON Server URL)
+// API endpoint 
 const API_BASE_URL = 'http://localhost:3000';
 
 function UserCard({ user }) {
@@ -123,8 +123,8 @@ export default function Dashboard() {
     setError(null);
     
     try {
-      // Replace this URL with your actual API endpoint
-      // For JSON Server: 'http://localhost:3000/users'
+      
+      
       const data = await fetchJson(`${API_BASE_URL}/users`);
       setUsers(data);
     } catch (err) {
@@ -185,7 +185,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Footer Info */}
+        
        
       </div>
     </div>
