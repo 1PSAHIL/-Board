@@ -9,7 +9,7 @@ export async function fetchJson(url) {
 }
 
 // API endpoint 
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'https://jsonplaceholder.typicode.com';
 
 function UserCard({ user }) {
   return (
