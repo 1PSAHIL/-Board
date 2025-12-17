@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Users, AlertCircle, Loader2, RefreshCw } from 'lucide-react';
+import React from 'react';
+import { Users, AlertCircle, Loader2, RefreshCw, CheckCircle } from 'lucide-react';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 
 // API utility function
 export async function fetchJson(url) {
@@ -8,8 +9,27 @@ export async function fetchJson(url) {
   return res.json();
 }
 
-// API endpoint 
+// API endpoint - Using JSONPlaceholder
 const API_BASE_URL = 'https://jsonplaceholder.typicode.com';
+
+// Create a QueryClient instance
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: true, // Auto-refetch on window focus
+      staleTime: 30000, // Data fresh for 30 seconds
+      cacheTime: 5 * 60 * 1000, // Cache for 5 minutes
+    },
+  },
+});
+
+// Custom hook using React Query
+function useUsers() {
+  return useQuery({
+    queryKey: ['users'],
+    queryFn: () => fetchJson(`${API_BASE_URL}/users`),
+  });
+}
 
 function UserCard({ user }) {
   return (
@@ -59,7 +79,9 @@ function ErrorState({ error, onRetry }) {
   );
 }
 
-function DashboardStats({ userCount, loading }) {
+function DashboardStats({ userCount, loading, isFetching, dataUpdatedAt }) {
+  const lastUpdated = dataUpdatedAt ? new Date(dataUpdatedAt).toLocaleTimeString() : 'Never';
+  
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div className="bg-white rounded-lg shadow p-6">
@@ -81,14 +103,16 @@ function DashboardStats({ userCount, loading }) {
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex items-center gap-3">
           <div className="bg-green-100 rounded-lg p-3">
-            <Users className="w-6 h-6 text-green-600" />
+            <CheckCircle className="w-6 h-6 text-green-600" />
           </div>
           <div>
-            <p className="text-sm text-gray-500">Active</p>
+            <p className="text-sm text-gray-500">Cache Status</p>
             {loading ? (
-              <div className="h-8 w-16 bg-gray-200 animate-pulse rounded mt-1"></div>
+              <div className="h-8 w-24 bg-gray-200 animate-pulse rounded mt-1"></div>
             ) : (
-              <p className="text-2xl font-bold text-gray-900">{userCount}</p>
+              <p className="text-lg font-semibold text-green-600">
+                {isFetching ? 'Updating...' : 'Cached'}
+              </p>
             )}
           </div>
         </div>
@@ -100,11 +124,11 @@ function DashboardStats({ userCount, loading }) {
             <Users className="w-6 h-6 text-purple-600" />
           </div>
           <div>
-            <p className="text-sm text-gray-500">API Status</p>
+            <p className="text-sm text-gray-500">Last Updated</p>
             {loading ? (
-              <div className="h-8 w-16 bg-gray-200 animate-pulse rounded mt-1"></div>
+              <div className="h-8 w-20 bg-gray-200 animate-pulse rounded mt-1"></div>
             ) : (
-              <p className="text-lg font-semibold text-green-600">Connected</p>
+              <p className="text-sm font-semibold text-gray-900">{lastUpdated}</p>
             )}
           </div>
         </div>
@@ -113,42 +137,36 @@ function DashboardStats({ userCount, loading }) {
   );
 }
 
-export default function Dashboard() {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const fetchUsers = async () => {
-    setLoading(true);
-    setError(null);
-    
-    try {
-      
-      
-      const data = await fetchJson(`${API_BASE_URL}/users`);
-      setUsers(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+function Dashboard() {
+  // Using React Query hook
+  const { data: users = [], isLoading, isError, error, refetch, isFetching, dataUpdatedAt } = useUsers();
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">User Dashboard</h1>
-          <p className="text-gray-600">API-driven user management system</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">User Dashboard</h1>
+              
+            </div>
+            {isFetching && !isLoading && (
+              <div className="flex items-center gap-2 text-blue-600 text-sm">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Syncing data...</span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Stats */}
-        <DashboardStats userCount={users.length} loading={loading} />
+        <DashboardStats 
+          userCount={users.length} 
+          loading={isLoading} 
+          isFetching={isFetching}
+          dataUpdatedAt={dataUpdatedAt}
+        />
 
         {/* Main Content */}
         <div className="bg-white rounded-lg shadow">
@@ -156,21 +174,21 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-900">Users</h2>
               <button
-                onClick={fetchUsers}
-                disabled={loading}
+                onClick={() => refetch()}
+                disabled={isLoading || isFetching}
                 className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
                 Refresh
               </button>
             </div>
           </div>
 
           <div className="p-6">
-            {loading && users.length === 0 ? (
+            {isLoading ? (
               <LoadingState />
-            ) : error ? (
-              <ErrorState error={error} onRetry={fetchUsers} />
+            ) : isError ? (
+              <ErrorState error={error.message} onRetry={refetch} />
             ) : users.length === 0 ? (
               <div className="text-center py-12 text-gray-500">
                 No users found
@@ -184,10 +202,16 @@ export default function Dashboard() {
             )}
           </div>
         </div>
-
-        
-       
       </div>
     </div>
+  );
+}
+
+// Main App with QueryClientProvider
+export default function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Dashboard />
+    </QueryClientProvider>
   );
 }
