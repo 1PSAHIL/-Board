@@ -1,6 +1,30 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Users, AlertCircle, Loader2, RefreshCw, CheckCircle, LogOut, Lock } from 'lucide-react';
+import { Users, AlertCircle, Loader2, RefreshCw, CheckCircle, LogOut, Lock, TrendingUp, BarChart3, UserCircle } from 'lucide-react';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+} from 'chart.js';
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+);
 
 // Auth Context
 const AuthContext = createContext(null);
@@ -10,7 +34,6 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
   const login = (email, password) => {
-    // Simulate authentication - in production, this would call your auth API
     if (email && password) {
       const mockToken = `mock_token_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       const mockUser = {
@@ -50,7 +73,6 @@ async function fetchJson(url, token) {
     'Content-Type': 'application/json',
   };
   
-  // Add Authorization header if token exists
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
@@ -81,7 +103,28 @@ function useUsers() {
   return useQuery({
     queryKey: ['users', token],
     queryFn: () => fetchJson(`${API_BASE_URL}/users`, token),
-    enabled: !!token, // Only fetch if authenticated
+    enabled: !!token,
+  });
+}
+
+// Custom hook for sales data
+function useSales() {
+  const { token } = useAuth();
+  
+  return useQuery({
+    queryKey: ['sales', token],
+    queryFn: async () => {
+      // Mock sales data - in production, this would be a real API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      return {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        revenue: [45000, 52000, 48000, 61000, 55000, 67000, 72000, 68000, 75000, 82000, 79000, 88000],
+        expenses: [32000, 35000, 33000, 42000, 38000, 45000, 48000, 46000, 51000, 55000, 53000, 58000]
+      };
+    },
+    enabled: !!token,
+    staleTime: 60000,
   });
 }
 
@@ -97,7 +140,6 @@ function LoginPage() {
     setError('');
     setIsLoading(true);
 
-    // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 800));
 
     const result = login(email, password);
@@ -113,7 +155,6 @@ function LoginPage() {
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">
-          {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
               <Lock className="w-8 h-8 text-blue-600" />
@@ -122,7 +163,6 @@ function LoginPage() {
             <p className="text-gray-600">Sign in to access your dashboard</p>
           </div>
 
-          {/* Login Form */}
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
@@ -180,7 +220,6 @@ function LoginPage() {
             </button>
           </div>
 
-          {/* Demo Hint */}
           <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <p className="text-xs text-blue-800 text-center">
               <strong>Demo:</strong> Use any email and password to login
@@ -298,19 +337,229 @@ function DashboardStats({ userCount, loading, isFetching, dataUpdatedAt }) {
   );
 }
 
-function Dashboard() {
-  const { user, logout, token } = useAuth();
-  const { data: users = [], isLoading, isError, error, refetch, isFetching, dataUpdatedAt } = useUsers();
+function SalesReport() {
+  const { data: salesData, isLoading, isError, error, refetch, isFetching } = useSales();
+
+  const chartData = salesData ? {
+    labels: salesData.labels,
+    datasets: [
+      {
+        label: 'Revenue',
+        data: salesData.revenue,
+        borderColor: 'rgb(59, 130, 246)',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        tension: 0.4,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        pointBackgroundColor: 'rgb(59, 130, 246)',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+      },
+      {
+        label: 'Expenses',
+        data: salesData.expenses,
+        borderColor: 'rgb(239, 68, 68)',
+        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+        tension: 0.4,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        pointBackgroundColor: 'rgb(239, 68, 68)',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+      }
+    ]
+  } : null;
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          usePointStyle: true,
+          padding: 15,
+          font: {
+            size: 12,
+            weight: 500
+          }
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        padding: 12,
+        titleFont: {
+          size: 14,
+          weight: 600
+        },
+        bodyFont: {
+          size: 13
+        },
+        callbacks: {
+          label: function(context) {
+            return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function(value) {
+            return '$' + (value / 1000) + 'k';
+          },
+          font: {
+            size: 11
+          }
+        },
+        grid: {
+          color: 'rgba(0, 0, 0, 0.05)'
+        }
+      },
+      x: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          font: {
+            size: 11
+          }
+        }
+      }
+    },
+    interaction: {
+      intersect: false,
+      mode: 'index'
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
+    <div className="bg-white rounded-lg shadow">
+      <div className="p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="bg-blue-100 rounded-lg p-2">
+              <TrendingUp className="w-5 h-5 text-blue-600" />
+            </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">User Dashboard</h1>
-              <p className="text-gray-600">Welcome back, {user?.name || 'User'}</p>
+              <h2 className="text-xl font-semibold text-gray-900">Sales Report</h2>
+              <p className="text-sm text-gray-500">Revenue vs Expenses (2024)</p>
+            </div>
+          </div>
+          <button
+            onClick={() => refetch()}
+            disabled={isLoading || isFetching}
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      <div className="p-6">
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-12">
+            <Loader2 className="w-12 h-12 text-blue-500 animate-spin mb-4" />
+            <p className="text-gray-600 font-medium">Loading sales data...</p>
+          </div>
+        ) : isError ? (
+          <div className="flex flex-col items-center justify-center py-12">
+            <div className="bg-red-50 rounded-full p-3 mb-4">
+              <AlertCircle className="w-12 h-12 text-red-500" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Failed to Load Sales Data</h3>
+            <p className="text-sm text-gray-600 mb-4">{error.message}</p>
+            <button
+              onClick={() => refetch()}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Try Again
+            </button>
+          </div>
+        ) : (
+          <div style={{ height: '400px' }}>
+            <Line data={chartData} options={chartOptions} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function UsersTab() {
+  const { data: users = [], isLoading, isError, error, refetch, isFetching } = useUsers();
+
+  return (
+    <div className="bg-white rounded-lg shadow">
+      <div className="p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-gray-900">Users</h2>
+          <button
+            onClick={() => refetch()}
+            disabled={isLoading || isFetching}
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      <div className="p-6">
+        {isLoading ? (
+          <LoadingState />
+        ) : isError ? (
+          <ErrorState error={error.message} onRetry={refetch} />
+        ) : users.length === 0 ? (
+          <div className="text-center py-12 text-gray-500">
+            No users found
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {users.map((user) => (
+              <UserCard key={user.id} user={user} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function TabButton({ active, icon: Icon, label, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-2 px-6 py-3 font-medium transition-all border-b-2 ${
+        active
+          ? 'text-blue-600 border-blue-600'
+          : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'
+      }`}
+    >
+      <Icon className="w-5 h-5" />
+      {label}
+    </button>
+  );
+}
+
+function Dashboard() {
+  const { user, logout } = useAuth();
+  const { data: users = [], isLoading, isFetching, dataUpdatedAt } = useUsers();
+  const [activeTab, setActiveTab] = useState('overview');
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex items-center justify-between py-4">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">User Dashboard</h1>
+              <p className="text-sm text-gray-600">Welcome back, {user?.name || 'User'}</p>
             </div>
             <div className="flex items-center gap-4">
               {isFetching && !isLoading && (
@@ -328,59 +577,53 @@ function Dashboard() {
               </button>
             </div>
           </div>
-          
-         
-         
+
+          <div className="flex gap-2 -mb-px">
+            <TabButton
+              active={activeTab === 'overview'}
+              icon={BarChart3}
+              label="Overview"
+              onClick={() => setActiveTab('overview')}
+            />
+            <TabButton
+              active={activeTab === 'sales'}
+              icon={TrendingUp}
+              label="Sales"
+              onClick={() => setActiveTab('sales')}
+            />
+            <TabButton
+              active={activeTab === 'users'}
+              icon={UserCircle}
+              label="Users"
+              onClick={() => setActiveTab('users')}
+            />
+          </div>
         </div>
+      </div>
 
-        {/* Stats */}
-        <DashboardStats 
-          userCount={users.length} 
-          loading={isLoading} 
-          isFetching={isFetching}
-          dataUpdatedAt={dataUpdatedAt}
-        />
-
-        {/* Main Content */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-gray-900">Users</h2>
-              <button
-                onClick={() => refetch()}
-                disabled={isLoading || isFetching}
-                className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
-                Refresh
-              </button>
+      <div className="max-w-6xl mx-auto p-6">
+        {activeTab === 'overview' && (
+          <div>
+            <DashboardStats 
+              userCount={users.length} 
+              loading={isLoading} 
+              isFetching={isFetching}
+              dataUpdatedAt={dataUpdatedAt}
+            />
+            <div className="grid grid-cols-1 gap-6">
+              <SalesReport />
+              <UsersTab />
             </div>
           </div>
+        )}
 
-          <div className="p-6">
-            {isLoading ? (
-              <LoadingState />
-            ) : isError ? (
-              <ErrorState error={error.message} onRetry={refetch} />
-            ) : users.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
-                No users found
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {users.map((user) => (
-                  <UserCard key={user.id} user={user} />
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+        {activeTab === 'sales' && <SalesReport />}
+        {activeTab === 'users' && <UsersTab />}
       </div>
     </div>
   );
 }
 
-// Main App with Auth and QueryClient
 export default function App() {
   return (
     <AuthProvider>
@@ -394,7 +637,6 @@ export default function App() {
 function AuthWrapper() {
   const { isAuthenticated } = useAuth();
   
-  // Protected route logic
   if (!isAuthenticated) {
     return <LoginPage />;
   }
