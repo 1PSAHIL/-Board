@@ -446,7 +446,7 @@ function SalesReport() {
             </div>
             <div>
               <h2 className="text-xl font-semibold text-gray-900">Sales Report</h2>
-              <p className="text-sm text-gray-500">Revenue vs Expenses (2024)</p>
+              <p className="text-sm text-gray-500">Revenue vs Expenses (2025)</p>
             </div>
           </div>
           <button
