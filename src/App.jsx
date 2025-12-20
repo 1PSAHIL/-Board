@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Users, AlertCircle, Loader2, RefreshCw, CheckCircle, LogOut, Lock, TrendingUp, BarChart3, UserCircle } from 'lucide-react';
+import { Users, AlertCircle, Loader2, RefreshCw, CheckCircle, LogOut, Lock, TrendingUp, BarChart3, UserCircle, Activity } from 'lucide-react';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { Line } from 'react-chartjs-2';
 import {
@@ -14,19 +14,8 @@ import {
   Filler
 } from 'chart.js';
 
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
-// Auth Context
 const AuthContext = createContext(null);
 
 function AuthProvider({ children }) {
@@ -36,10 +25,7 @@ function AuthProvider({ children }) {
   const login = (email, password) => {
     if (email && password) {
       const mockToken = `mock_token_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      const mockUser = {
-        email,
-        name: email.split('@')[0],
-      };
+      const mockUser = { email, name: email.split('@')[0] };
       setToken(mockToken);
       setUser(mockUser);
       return { success: true };
@@ -61,31 +47,20 @@ function AuthProvider({ children }) {
 
 function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
-  }
+  if (!context) throw new Error('useAuth must be used within AuthProvider');
   return context;
 }
 
-// API utility function with token
 async function fetchJson(url, token) {
-  const headers = {
-    'Content-Type': 'application/json',
-  };
-  
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
   const res = await fetch(url, { headers });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
 
-// API endpoint
 const API_BASE_URL = 'https://jsonplaceholder.typicode.com';
 
-// Create a QueryClient instance
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -96,10 +71,8 @@ const queryClient = new QueryClient({
   },
 });
 
-// Custom hook using React Query with auth token
 function useUsers() {
   const { token } = useAuth();
-  
   return useQuery({
     queryKey: ['users', token],
     queryFn: () => fetchJson(`${API_BASE_URL}/users`, token),
@@ -107,21 +80,45 @@ function useUsers() {
   });
 }
 
-// Custom hook for sales data
 function useSales() {
   const { token } = useAuth();
-  
   return useQuery({
     queryKey: ['sales', token],
     queryFn: async () => {
-      // Mock sales data - in production, this would be a real API call
       await new Promise(resolve => setTimeout(resolve, 500));
-      
       return {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         revenue: [45000, 52000, 48000, 61000, 55000, 67000, 72000, 68000, 75000, 82000, 79000, 88000],
         expenses: [32000, 35000, 33000, 42000, 38000, 45000, 48000, 46000, 51000, 55000, 53000, 58000]
       };
+    },
+    enabled: !!token,
+    staleTime: 60000,
+  });
+}
+
+function useActivityData() {
+  const { token } = useAuth();
+  return useQuery({
+    queryKey: ['activity', token],
+    queryFn: async () => {
+      await new Promise(resolve => setTimeout(resolve, 600));
+      const weeks = 12;
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const data = [];
+      
+      for (let week = 0; week < weeks; week++) {
+        for (let day = 0; day < 7; day++) {
+          let value;
+          if (day === 0 || day === 6) {
+            value = Math.floor(Math.random() * 30);
+          } else {
+            value = Math.floor(Math.random() * 100);
+          }
+          data.push({ week, day, dayName: days[day], value });
+        }
+      }
+      return { data, days, weeks };
     },
     enabled: !!token,
     staleTime: 60000,
@@ -139,15 +136,9 @@ function LoginPage() {
     e.preventDefault();
     setError('');
     setIsLoading(true);
-
     await new Promise(resolve => setTimeout(resolve, 800));
-
     const result = login(email, password);
-    
-    if (!result.success) {
-      setError(result.error || 'Login failed');
-    }
-    
+    if (!result.success) setError(result.error || 'Login failed');
     setIsLoading(false);
   };
 
@@ -165,9 +156,7 @@ function LoginPage() {
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
-              </label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
               <input
                 id="email"
                 type="email"
@@ -179,20 +168,14 @@ function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">Password</label>
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleSubmit(e);
-                  }
-                }}
+                onKeyDown={(e) => e.key === 'Enter' && handleSubmit(e)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
               />
             </div>
@@ -241,9 +224,7 @@ function UserCard({ user }) {
         <div className="flex-1">
           <h3 className="font-semibold text-gray-900">{user.name}</h3>
           <p className="text-sm text-gray-500">{user.email}</p>
-          {user.company && (
-            <p className="text-xs text-gray-400 mt-1">{user.company.name}</p>
-          )}
+          {user.company && <p className="text-xs text-gray-400 mt-1">{user.company.name}</p>}
         </div>
       </div>
     </div>
@@ -381,22 +362,14 @@ function SalesReport() {
         labels: {
           usePointStyle: true,
           padding: 15,
-          font: {
-            size: 12,
-            weight: 500
-          }
+          font: { size: 12, weight: 500 }
         }
       },
       tooltip: {
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         padding: 12,
-        titleFont: {
-          size: 14,
-          weight: 600
-        },
-        bodyFont: {
-          size: 13
-        },
+        titleFont: { size: 14, weight: 600 },
+        bodyFont: { size: 13 },
         callbacks: {
           label: function(context) {
             return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
@@ -411,23 +384,13 @@ function SalesReport() {
           callback: function(value) {
             return '$' + (value / 1000) + 'k';
           },
-          font: {
-            size: 11
-          }
+          font: { size: 11 }
         },
-        grid: {
-          color: 'rgba(0, 0, 0, 0.05)'
-        }
+        grid: { color: 'rgba(0, 0, 0, 0.05)' }
       },
       x: {
-        grid: {
-          display: false
-        },
-        ticks: {
-          font: {
-            size: 11
-          }
-        }
+        grid: { display: false },
+        ticks: { font: { size: 11 } }
       }
     },
     interaction: {
@@ -491,6 +454,163 @@ function SalesReport() {
   );
 }
 
+function ActivityHeatmap() {
+  const { data: activityData, isLoading, isError, error, refetch, isFetching } = useActivityData();
+  const [hoveredCell, setHoveredCell] = useState(null);
+
+  const getColorClass = (value) => {
+    if (value === 0) return 'bg-gray-100';
+    if (value < 25) return 'bg-green-200';
+    if (value < 50) return 'bg-green-300';
+    if (value < 75) return 'bg-green-400';
+    return 'bg-green-500';
+  };
+
+  const getIntensityLevel = (value) => {
+    if (value === 0) return 'None';
+    if (value < 25) return 'Low';
+    if (value < 50) return 'Medium';
+    if (value < 75) return 'High';
+    return 'Very High';
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow">
+      <div className="p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="bg-green-100 rounded-lg p-2">
+              <Activity className="w-5 h-5 text-green-600" />
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900">Activity Heatmap</h2>
+              <p className="text-sm text-gray-500">User engagement over the last 12 weeks</p>
+            </div>
+          </div>
+          <button
+            onClick={() => refetch()}
+            disabled={isLoading || isFetching}
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      <div className="p-6">
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-12">
+            <Loader2 className="w-12 h-12 text-green-500 animate-spin mb-4" />
+            <p className="text-gray-600 font-medium">Loading activity data...</p>
+          </div>
+        ) : isError ? (
+          <div className="flex flex-col items-center justify-center py-12">
+            <div className="bg-red-50 rounded-full p-3 mb-4">
+              <AlertCircle className="w-12 h-12 text-red-500" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Failed to Load Activity Data</h3>
+            <p className="text-sm text-gray-600 mb-4">{error.message}</p>
+            <button
+              onClick={() => refetch()}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Try Again
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            <div className="overflow-x-auto">
+              <div className="inline-block min-w-full">
+                <div className="flex gap-1">
+                  <div className="flex flex-col gap-1 pr-2">
+                    <div className="h-6"></div>
+                    {activityData.days.map((day, idx) => (
+                      <div key={idx} className="h-4 flex items-center text-xs text-gray-600 font-medium">
+                        {day}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex gap-1">
+                    {Array.from({ length: activityData.weeks }).map((_, weekIdx) => (
+                      <div key={weekIdx} className="flex flex-col gap-1">
+                        <div className="h-6 flex items-center justify-center text-xs text-gray-500">
+                          W{weekIdx + 1}
+                        </div>
+                        {activityData.days.map((_, dayIdx) => {
+                          const cellData = activityData.data.find(
+                            d => d.week === weekIdx && d.day === dayIdx
+                          );
+                          return (
+                            <div
+                              key={`${weekIdx}-${dayIdx}`}
+                              className={`w-8 h-4 rounded-sm cursor-pointer transition-all hover:ring-2 hover:ring-blue-500 hover:scale-110 ${getColorClass(cellData?.value || 0)}`}
+                              onMouseEnter={() => setHoveredCell(cellData)}
+                              onMouseLeave={() => setHoveredCell(null)}
+                              title={`${cellData?.dayName}, Week ${weekIdx + 1}: ${cellData?.value || 0} activities`}
+                            />
+                          );
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {hoveredCell && (
+              <div className="bg-gray-800 text-white px-4 py-2 rounded-lg text-sm">
+                <div className="font-semibold">{hoveredCell.dayName}, Week {hoveredCell.week + 1}</div>
+                <div className="text-gray-300">
+                  {hoveredCell.value} activities · {getIntensityLevel(hoveredCell.value)} intensity
+                </div>
+              </div>
+            )}
+
+            <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+              <div className="text-sm text-gray-600">Activity Level:</div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-500">Low</span>
+                <div className="flex gap-1">
+                  <div className="w-6 h-6 rounded bg-gray-100 border border-gray-300"></div>
+                  <div className="w-6 h-6 rounded bg-green-200"></div>
+                  <div className="w-6 h-6 rounded bg-green-300"></div>
+                  <div className="w-6 h-6 rounded bg-green-400"></div>
+                  <div className="w-6 h-6 rounded bg-green-500"></div>
+                </div>
+                <span className="text-xs text-gray-500">High</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-gray-200">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-gray-900">
+                  {activityData.data.reduce((sum, d) => sum + d.value, 0)}
+                </div>
+                <div className="text-sm text-gray-500">Total Activities</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-gray-900">
+                  {Math.round(activityData.data.reduce((sum, d) => sum + d.value, 0) / activityData.data.length)}
+                </div>
+                <div className="text-sm text-gray-500">Daily Average</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-gray-900">
+                  {Math.max(...activityData.data.map(d => d.value))}
+                </div>
+                <div className="text-sm text-gray-500">Peak Activity</div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function UsersTab() {
   const { data: users = [], isLoading, isError, error, refetch, isFetching } = useUsers();
 
@@ -516,9 +636,7 @@ function UsersTab() {
         ) : isError ? (
           <ErrorState error={error.message} onRetry={refetch} />
         ) : users.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
-            No users found
-          </div>
+          <div className="text-center py-12 text-gray-500">No users found</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {users.map((user) => (
@@ -578,25 +696,11 @@ function Dashboard() {
             </div>
           </div>
 
-          <div className="flex gap-2 -mb-px">
-            <TabButton
-              active={activeTab === 'overview'}
-              icon={BarChart3}
-              label="Overview"
-              onClick={() => setActiveTab('overview')}
-            />
-            <TabButton
-              active={activeTab === 'sales'}
-              icon={TrendingUp}
-              label="Sales"
-              onClick={() => setActiveTab('sales')}
-            />
-            <TabButton
-              active={activeTab === 'users'}
-              icon={UserCircle}
-              label="Users"
-              onClick={() => setActiveTab('users')}
-            />
+          <div className="flex gap-2 -mb-px overflow-x-auto">
+            <TabButton active={activeTab === 'overview'} icon={BarChart3} label="Overview" onClick={() => setActiveTab('overview')} />
+            <TabButton active={activeTab === 'sales'} icon={TrendingUp} label="Sales" onClick={() => setActiveTab('sales')} />
+            <TabButton active={activeTab === 'activity'} icon={Activity} label="Activity" onClick={() => setActiveTab('activity')} />
+            <TabButton active={activeTab === 'users'} icon={UserCircle} label="Users" onClick={() => setActiveTab('users')} />
           </div>
         </div>
       </div>
@@ -604,20 +708,16 @@ function Dashboard() {
       <div className="max-w-6xl mx-auto p-6">
         {activeTab === 'overview' && (
           <div>
-            <DashboardStats 
-              userCount={users.length} 
-              loading={isLoading} 
-              isFetching={isFetching}
-              dataUpdatedAt={dataUpdatedAt}
-            />
+            <DashboardStats userCount={users.length} loading={isLoading} isFetching={isFetching} dataUpdatedAt={dataUpdatedAt} />
             <div className="grid grid-cols-1 gap-6">
               <SalesReport />
+              <ActivityHeatmap />
               <UsersTab />
             </div>
           </div>
         )}
-
         {activeTab === 'sales' && <SalesReport />}
+        {activeTab === 'activity' && <ActivityHeatmap />}
         {activeTab === 'users' && <UsersTab />}
       </div>
     </div>
@@ -636,10 +736,6 @@ export default function App() {
 
 function AuthWrapper() {
   const { isAuthenticated } = useAuth();
-  
-  if (!isAuthenticated) {
-    return <LoginPage />;
-  }
-  
-  return <Dashboard />;
+  return isAuthenticated ? <Dashboard /> : <LoginPage />;
 }
+
