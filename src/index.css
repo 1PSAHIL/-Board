@@ -1,1 +1,614 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Login Page Styles */
+.login-container {
+  @apply min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-6;
+}
+
+.login-wrapper {
+  @apply w-full max-w-md;
+}
+
+.login-card {
+  @apply bg-white rounded-2xl shadow-xl p-8;
+}
+
+.login-header {
+  @apply text-center mb-8;
+}
+
+.login-icon-wrapper {
+  @apply inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4;
+}
+
+.login-icon {
+  @apply w-8 h-8 text-blue-600;
+}
+
+.login-title {
+  @apply text-2xl font-bold text-gray-900 mb-2;
+}
+
+.login-subtitle {
+  @apply text-gray-600;
+}
+
+.login-form {
+  @apply space-y-4;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-gray-700 mb-2;
+}
+
+.form-input {
+  @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all;
+}
+
+.error-alert {
+  @apply flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg;
+}
+
+.error-icon {
+  @apply w-5 h-5 text-red-600 flex-shrink-0;
+}
+
+.error-text {
+  @apply text-sm text-red-600;
+}
+
+.submit-button {
+  @apply w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2;
+}
+
+.button-spinner {
+  @apply w-5 h-5 animate-spin;
+}
+
+.login-demo-notice {
+  @apply mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200;
+}
+
+.demo-text {
+  @apply text-xs text-blue-800 text-center;
+}
+
+/* User Card Styles */
+.user-card {
+  @apply bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow;
+}
+
+.user-card-content {
+  @apply flex items-start gap-3;
+}
+
+.user-avatar {
+  @apply w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold;
+}
+
+.user-info {
+  @apply flex-1;
+}
+
+.user-name {
+  @apply font-semibold text-gray-900;
+}
+
+.user-email {
+  @apply text-sm text-gray-500;
+}
+
+.user-company {
+  @apply text-xs text-gray-400 mt-1;
+}
+
+/* Loading State Styles */
+.loading-state {
+  @apply flex flex-col items-center justify-center py-12;
+}
+
+.loading-spinner {
+  @apply w-12 h-12 text-blue-500 animate-spin mb-4;
+}
+
+.loading-title {
+  @apply text-gray-600 font-medium;
+}
+
+.loading-subtitle {
+  @apply text-sm text-gray-400 mt-1;
+}
+
+/* Error State Styles */
+.error-state {
+  @apply flex flex-col items-center justify-center py-12;
+}
+
+.error-icon-wrapper {
+  @apply bg-red-50 rounded-full p-3 mb-4;
+}
+
+.error-state-icon {
+  @apply w-12 h-12 text-red-500;
+}
+
+.error-state-title {
+  @apply text-lg font-semibold text-gray-900 mb-2;
+}
+
+.error-state-message {
+  @apply text-sm text-gray-600 mb-4;
+}
+
+.retry-button {
+  @apply flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors;
+}
+
+.retry-icon {
+  @apply w-4 h-4;
+}
+
+/* Dashboard Stats Styles */
+.stats-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-4 mb-6;
+}
+
+.stat-card {
+  @apply bg-white rounded-lg shadow p-6;
+}
+
+.stat-card-content {
+  @apply flex items-center gap-3;
+}
+
+.stat-icon-wrapper {
+  @apply rounded-lg p-3;
+}
+
+.stat-icon-blue {
+  @apply bg-blue-100;
+}
+
+.stat-icon-green {
+  @apply bg-green-100;
+}
+
+.stat-icon-purple {
+  @apply bg-purple-100;
+}
+
+.stat-icon {
+  @apply w-6 h-6;
+}
+
+.stat-icon-blue .stat-icon {
+  @apply text-blue-600;
+}
+
+.stat-icon-green .stat-icon {
+  @apply text-green-600;
+}
+
+.stat-icon-purple .stat-icon {
+  @apply text-purple-600;
+}
+
+.stat-label {
+  @apply text-sm text-gray-500;
+}
+
+.stat-value {
+  @apply text-2xl font-bold text-gray-900;
+}
+
+.stat-skeleton {
+  @apply h-8 w-16 bg-gray-200 animate-pulse rounded mt-1;
+}
+
+.stat-skeleton-wide {
+  @apply h-8 w-24 bg-gray-200 animate-pulse rounded mt-1;
+}
+
+.stat-skeleton-small {
+  @apply h-8 w-20 bg-gray-200 animate-pulse rounded mt-1;
+}
+
+.stat-status {
+  @apply text-lg font-semibold text-green-600;
+}
+
+.stat-time {
+  @apply text-sm font-semibold text-gray-900;
+}
+
+/* Sales Report Styles */
+.report-card {
+  @apply bg-white rounded-lg shadow;
+}
+
+.report-header {
+  @apply p-6 border-b border-gray-200;
+}
+
+.report-header-content {
+  @apply flex items-center justify-between;
+}
+
+.report-title-wrapper {
+  @apply flex items-center gap-3;
+}
+
+.report-icon-wrapper {
+  @apply bg-blue-100 rounded-lg p-2;
+}
+
+.report-icon {
+  @apply w-5 h-5 text-blue-600;
+}
+
+.report-title {
+  @apply text-xl font-semibold text-gray-900;
+}
+
+.report-subtitle {
+  @apply text-sm text-gray-500;
+}
+
+.refresh-button {
+  @apply flex items-center gap-2 px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors;
+}
+
+.refresh-icon {
+  @apply w-4 h-4;
+}
+
+.refresh-icon-spinning {
+  @apply w-4 h-4 animate-spin;
+}
+
+.report-content {
+  @apply p-6;
+}
+
+.report-loading {
+  @apply flex flex-col items-center justify-center py-12;
+}
+
+.loading-spinner-large {
+  @apply w-12 h-12 text-blue-500 animate-spin mb-4;
+}
+
+.loading-text {
+  @apply text-gray-600 font-medium;
+}
+
+.report-error {
+  @apply flex flex-col items-center justify-center py-12;
+}
+
+.report-error-icon-wrapper {
+  @apply bg-red-50 rounded-full p-3 mb-4;
+}
+
+.report-error-icon {
+  @apply w-12 h-12 text-red-500;
+}
+
+.report-error-title {
+  @apply text-lg font-semibold text-gray-900 mb-2;
+}
+
+.report-error-message {
+  @apply text-sm text-gray-600 mb-4;
+}
+
+.report-retry-button {
+  @apply flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors;
+}
+
+/* Activity Heatmap Styles */
+.heatmap-card {
+  @apply bg-white rounded-lg shadow;
+}
+
+.heatmap-header {
+  @apply p-6 border-b border-gray-200;
+}
+
+.heatmap-header-content {
+  @apply flex items-center justify-between;
+}
+
+.heatmap-title-wrapper {
+  @apply flex items-center gap-3;
+}
+
+.heatmap-icon-wrapper {
+  @apply bg-green-100 rounded-lg p-2;
+}
+
+.heatmap-icon {
+  @apply w-5 h-5 text-green-600;
+}
+
+.heatmap-title {
+  @apply text-xl font-semibold text-gray-900;
+}
+
+.heatmap-subtitle {
+  @apply text-sm text-gray-500;
+}
+
+.heatmap-content {
+  @apply p-6;
+}
+
+.heatmap-loading {
+  @apply flex flex-col items-center justify-center py-12;
+}
+
+.loading-spinner-green {
+  @apply w-12 h-12 text-green-500 animate-spin mb-4;
+}
+
+.heatmap-error {
+  @apply flex flex-col items-center justify-center py-12;
+}
+
+.heatmap-error-icon-wrapper {
+  @apply bg-red-50 rounded-full p-3 mb-4;
+}
+
+.heatmap-error-icon {
+  @apply w-12 h-12 text-red-500;
+}
+
+.heatmap-error-title {
+  @apply text-lg font-semibold text-gray-900 mb-2;
+}
+
+.heatmap-error-message {
+  @apply text-sm text-gray-600 mb-4;
+}
+
+.heatmap-retry-button {
+  @apply flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors;
+}
+
+.heatmap-wrapper {
+  @apply space-y-6;
+}
+
+.heatmap-scroll-container {
+  @apply overflow-x-auto;
+}
+
+.heatmap-grid-wrapper {
+  @apply inline-block min-w-full;
+}
+
+.heatmap-grid-container {
+  @apply flex gap-1;
+}
+
+.heatmap-day-labels {
+  @apply flex flex-col gap-1 pr-2;
+}
+
+.heatmap-spacer {
+  @apply h-6;
+}
+
+.heatmap-day-label {
+  @apply h-4 flex items-center text-xs text-gray-600 font-medium;
+}
+
+.heatmap-grid {
+  @apply flex gap-1;
+}
+
+.heatmap-week-column {
+  @apply flex flex-col gap-1;
+}
+
+.heatmap-week-label {
+  @apply h-6 flex items-center justify-center text-xs text-gray-500;
+}
+
+.heatmap-cell {
+  @apply w-8 h-4 rounded-sm cursor-pointer transition-all hover:ring-2 hover:ring-blue-500 hover:scale-110;
+}
+
+.heatmap-cell-none {
+  @apply bg-gray-100;
+}
+
+.heatmap-cell-low {
+  @apply bg-green-200;
+}
+
+.heatmap-cell-medium {
+  @apply bg-green-300;
+}
+
+.heatmap-cell-high {
+  @apply bg-green-400;
+}
+
+.heatmap-cell-very-high {
+  @apply bg-green-500;
+}
+
+.heatmap-tooltip {
+  @apply bg-gray-800 text-white px-4 py-2 rounded-lg text-sm;
+}
+
+.heatmap-tooltip-title {
+  @apply font-semibold;
+}
+
+.heatmap-tooltip-content {
+  @apply text-gray-300;
+}
+
+.heatmap-legend-wrapper {
+  @apply flex items-center justify-between pt-4 border-t border-gray-200;
+}
+
+.heatmap-legend-label {
+  @apply text-sm text-gray-600;
+}
+
+.heatmap-legend {
+  @apply flex items-center gap-2;
+}
+
+.heatmap-legend-text {
+  @apply text-xs text-gray-500;
+}
+
+.heatmap-legend-colors {
+  @apply flex gap-1;
+}
+
+.heatmap-legend-color {
+  @apply w-6 h-6 rounded;
+}
+
+.heatmap-legend-none {
+  @apply bg-gray-100 border border-gray-300;
+}
+
+.heatmap-legend-low {
+  @apply bg-green-200;
+}
+
+.heatmap-legend-medium {
+  @apply bg-green-300;
+}
+
+.heatmap-legend-high {
+  @apply bg-green-400;
+}
+
+.heatmap-legend-very-high {
+  @apply bg-green-500;
+}
+
+.heatmap-stats {
+  @apply grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-gray-200;
+}
+
+.heatmap-stat {
+  @apply text-center;
+}
+
+.heatmap-stat-value {
+  @apply text-2xl font-bold text-gray-900;
+}
+
+.heatmap-stat-label {
+  @apply text-sm text-gray-500;
+}
+
+/* Users Tab Styles */
+.users-tab {
+  @apply bg-white rounded-lg shadow;
+}
+
+.users-header {
+  @apply p-6 border-b border-gray-200;
+}
+
+.users-header-content {
+  @apply flex items-center justify-between;
+}
+
+.users-title {
+  @apply text-xl font-semibold text-gray-900;
+}
+
+.users-content {
+  @apply p-6;
+}
+
+.users-empty {
+  @apply text-center py-12 text-gray-500;
+}
+
+.users-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+/* Tab Button Styles */
+.tab-button {
+  @apply flex items-center gap-2 px-6 py-3 font-medium transition-all border-b-2 text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300;
+}
+
+.tab-button-active {
+  @apply flex items-center gap-2 px-6 py-3 font-medium transition-all border-b-2 text-blue-600 border-blue-600;
+}
+
+.tab-icon {
+  @apply w-5 h-5;
+}
+
+/* Dashboard Styles */
+.dashboard {
+  @apply min-h-screen bg-gray-50;
+}
+
+.dashboard-header {
+  @apply bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm;
+}
+
+.dashboard-header-container {
+  @apply max-w-6xl mx-auto px-6;
+}
+
+.dashboard-header-content {
+  @apply flex items-center justify-between py-4;
+}
+
+.dashboard-title {
+  @apply text-2xl font-bold text-gray-900;
+}
+
+.dashboard-subtitle {
+  @apply text-sm text-gray-600;
+}
+
+.dashboard-header-actions {
+  @apply flex items-center gap-4;
+}
+
+.sync-indicator {
+  @apply flex items-center gap-2 text-blue-600 text-sm;
+}
+
+.sync-spinner {
+  @apply w-4 h-4 animate-spin;
+}
+
+.logout-button {
+  @apply flex items-center gap-2 px-4 py-2 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors;
+}
+
+.logout-icon {
+  @apply w-4 h-4;
+}
+
+.tabs-container {
+  @apply flex gap-2 -mb-px overflow-x-auto;
+}
+
+.dashboard-content {
+  @apply max-w-6xl mx-auto p-6;
+}
+
+.dashboard-sections {
+  @apply grid grid-cols-1 gap-6;
+}
+>>>>>>> milestone-6

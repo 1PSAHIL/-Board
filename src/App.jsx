@@ -143,6 +143,7 @@ function LoginPage() {
   };
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-6">
       <div className="w-full max-w-md">
 
@@ -158,18 +159,42 @@ function LoginPage() {
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+=======
+    <div className="login-container">
+      <div className="login-wrapper">
+        <div className="login-card">
+          <div className="login-header">
+            <div className="login-icon-wrapper">
+              <Lock className="login-icon" />
+            </div>
+            <h1 className="login-title">Welcome Back</h1>
+            <p className="login-subtitle">Sign in to access your dashboard</p>
+          </div>
+
+          <div className="login-form">
+            <div>
+              <label htmlFor="email" className="form-label">Email Address</label>
+>>>>>>> milestone-6
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="user@example.com"
+<<<<<<< HEAD
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+=======
+                className="form-input"
+>>>>>>> milestone-6
               />
             </div>
 
             <div>
+<<<<<<< HEAD
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+=======
+              <label htmlFor="password" className="form-label">Password</label>
+>>>>>>> milestone-6
               <input
                 id="password"
                 type="password"
@@ -177,25 +202,43 @@ function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 onKeyDown={(e) => e.key === 'Enter' && handleSubmit(e)}
+<<<<<<< HEAD
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+=======
+                className="form-input"
+>>>>>>> milestone-6
               />
             </div>
 
             {error && (
+<<<<<<< HEAD
               <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
                 <AlertCircle className="w-5 h-5 text-red-600 flex shrink-0" />
                 <p className="text-sm text-red-600">{error}</p>
+=======
+              <div className="error-alert">
+                <AlertCircle className="error-icon" />
+                <p className="error-text">{error}</p>
+>>>>>>> milestone-6
               </div>
             )}
 
             <button
               onClick={handleSubmit}
               disabled={isLoading}
+<<<<<<< HEAD
               className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
+=======
+              className="submit-button"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="button-spinner" />
+>>>>>>> milestone-6
                   Signing in...
                 </>
               ) : (
@@ -204,8 +247,13 @@ function LoginPage() {
             </button>
           </div>
 
+<<<<<<< HEAD
           <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <p className="text-xs text-blue-800 text-center">
+=======
+          <div className="login-demo-notice">
+            <p className="demo-text">
+>>>>>>> milestone-6
               <strong>Demo:</strong> Use any email and password to login
             </p>
           </div>
@@ -217,6 +265,7 @@ function LoginPage() {
 
 function UserCard({ user }) {
   return (
+<<<<<<< HEAD
     <div className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow">
       <div className="flex items-start gap-3">
         <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
@@ -226,6 +275,17 @@ function UserCard({ user }) {
           <h3 className="font-semibold text-gray-900">{user.name}</h3>
           <p className="text-sm text-gray-500">{user.email}</p>
           {user.company && <p className="text-xs text-gray-400 mt-1">{user.company.name}</p>}
+=======
+    <div className="user-card">
+      <div className="user-card-content">
+        <div className="user-avatar">
+          {user.name.charAt(0)}
+        </div>
+        <div className="user-info">
+          <h3 className="user-name">{user.name}</h3>
+          <p className="user-email">{user.email}</p>
+          {user.company && <p className="user-company">{user.company.name}</p>}
+>>>>>>> milestone-6
         </div>
       </div>
     </div>
@@ -234,16 +294,24 @@ function UserCard({ user }) {
 
 function LoadingState() {
   return (
+<<<<<<< HEAD
     <div className="flex flex-col items-center justify-center py-12">
       <Loader2 className="w-12 h-12 text-blue-500 animate-spin mb-4" />
       <p className="text-gray-600 font-medium">Loading users...</p>
       <p className="text-sm text-gray-400 mt-1">Please wait</p>
+=======
+    <div className="loading-state">
+      <Loader2 className="loading-spinner" />
+      <p className="loading-title">Loading users...</p>
+      <p className="loading-subtitle">Please wait</p>
+>>>>>>> milestone-6
     </div>
   );
 }
 
 function ErrorState({ error, onRetry }) {
   return (
+<<<<<<< HEAD
     <div className="flex flex-col items-center justify-center py-12">
       <div className="bg-red-50 rounded-full p-3 mb-4">
         <AlertCircle className="w-12 h-12 text-red-500" />
@@ -255,6 +323,16 @@ function ErrorState({ error, onRetry }) {
         className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
       >
         <RefreshCw className="w-4 h-4" />
+=======
+    <div className="error-state">
+      <div className="error-icon-wrapper">
+        <AlertCircle className="error-state-icon" />
+      </div>
+      <h3 className="error-state-title">Failed to Load Users</h3>
+      <p className="error-state-message">{error}</p>
+      <button onClick={onRetry} className="retry-button">
+        <RefreshCw className="retry-icon" />
+>>>>>>> milestone-6
         Try Again
       </button>
     </div>
@@ -265,6 +343,7 @@ function DashboardStats({ userCount, loading, isFetching, dataUpdatedAt }) {
   const lastUpdated = dataUpdatedAt ? new Date(dataUpdatedAt).toLocaleTimeString() : 'Never';
   
   return (
+<<<<<<< HEAD
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex items-center gap-3">
@@ -277,11 +356,26 @@ function DashboardStats({ userCount, loading, isFetching, dataUpdatedAt }) {
               <div className="h-8 w-16 bg-gray-200 animate-pulse rounded mt-1"></div>
             ) : (
               <p className="text-2xl font-bold text-gray-900">{userCount}</p>
+=======
+    <div className="stats-grid">
+      <div className="stat-card">
+        <div className="stat-card-content">
+          <div className="stat-icon-wrapper stat-icon-blue">
+            <Users className="stat-icon" />
+          </div>
+          <div>
+            <p className="stat-label">Total Users</p>
+            {loading ? (
+              <div className="stat-skeleton"></div>
+            ) : (
+              <p className="stat-value">{userCount}</p>
+>>>>>>> milestone-6
             )}
           </div>
         </div>
       </div>
       
+<<<<<<< HEAD
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex items-center gap-3">
           <div className="bg-green-100 rounded-lg p-3">
@@ -293,6 +387,19 @@ function DashboardStats({ userCount, loading, isFetching, dataUpdatedAt }) {
               <div className="h-8 w-24 bg-gray-200 animate-pulse rounded mt-1"></div>
             ) : (
               <p className="text-lg font-semibold text-green-600">
+=======
+      <div className="stat-card">
+        <div className="stat-card-content">
+          <div className="stat-icon-wrapper stat-icon-green">
+            <CheckCircle className="stat-icon" />
+          </div>
+          <div>
+            <p className="stat-label">Cache Status</p>
+            {loading ? (
+              <div className="stat-skeleton-wide"></div>
+            ) : (
+              <p className="stat-status">
+>>>>>>> milestone-6
                 {isFetching ? 'Updating...' : 'Cached'}
               </p>
             )}
@@ -300,6 +407,7 @@ function DashboardStats({ userCount, loading, isFetching, dataUpdatedAt }) {
         </div>
       </div>
       
+<<<<<<< HEAD
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex items-center gap-3">
           <div className="bg-purple-100 rounded-lg p-3">
@@ -311,6 +419,19 @@ function DashboardStats({ userCount, loading, isFetching, dataUpdatedAt }) {
               <div className="h-8 w-20 bg-gray-200 animate-pulse rounded mt-1"></div>
             ) : (
               <p className="text-sm font-semibold text-gray-900">{lastUpdated}</p>
+=======
+      <div className="stat-card">
+        <div className="stat-card-content">
+          <div className="stat-icon-wrapper stat-icon-purple">
+            <Users className="stat-icon" />
+          </div>
+          <div>
+            <p className="stat-label">Last Updated</p>
+            {loading ? (
+              <div className="stat-skeleton-small"></div>
+            ) : (
+              <p className="stat-time">{lastUpdated}</p>
+>>>>>>> milestone-6
             )}
           </div>
         </div>
@@ -401,6 +522,7 @@ function SalesReport() {
   };
 
   return (
+<<<<<<< HEAD
     <div className="bg-white rounded-lg shadow">
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between">
@@ -411,19 +533,38 @@ function SalesReport() {
             <div>
               <h2 className="text-xl font-semibold text-gray-900">Sales Report</h2>
               <p className="text-sm text-gray-500">Revenue vs Expenses (2025)</p>
+=======
+    <div className="report-card">
+      <div className="report-header">
+        <div className="report-header-content">
+          <div className="report-title-wrapper">
+            <div className="report-icon-wrapper">
+              <TrendingUp className="report-icon" />
+            </div>
+            <div>
+              <h2 className="report-title">Sales Report</h2>
+              <p className="report-subtitle">Revenue vs Expenses (2025)</p>
+>>>>>>> milestone-6
             </div>
           </div>
           <button
             onClick={() => refetch()}
             disabled={isLoading || isFetching}
+<<<<<<< HEAD
             className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
+=======
+            className="refresh-button"
+          >
+            <RefreshCw className={isFetching ? "refresh-icon-spinning" : "refresh-icon"} />
+>>>>>>> milestone-6
             Refresh
           </button>
         </div>
       </div>
 
+<<<<<<< HEAD
       <div className="p-6">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-12">
@@ -442,6 +583,23 @@ function SalesReport() {
               className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
+=======
+      <div className="report-content">
+        {isLoading ? (
+          <div className="report-loading">
+            <Loader2 className="loading-spinner-large" />
+            <p className="loading-text">Loading sales data...</p>
+          </div>
+        ) : isError ? (
+          <div className="report-error">
+            <div className="report-error-icon-wrapper">
+              <AlertCircle className="report-error-icon" />
+            </div>
+            <h3 className="report-error-title">Failed to Load Sales Data</h3>
+            <p className="report-error-message">{error.message}</p>
+            <button onClick={() => refetch()} className="report-retry-button">
+              <RefreshCw className="retry-icon" />
+>>>>>>> milestone-6
               Try Again
             </button>
           </div>
@@ -460,11 +618,19 @@ function ActivityHeatmap() {
   const [hoveredCell, setHoveredCell] = useState(null);
 
   const getColorClass = (value) => {
+<<<<<<< HEAD
     if (value === 0) return 'bg-gray-100';
     if (value < 25) return 'bg-green-200';
     if (value < 50) return 'bg-green-300';
     if (value < 75) return 'bg-green-400';
     return 'bg-green-500';
+=======
+    if (value === 0) return 'heatmap-cell-none';
+    if (value < 25) return 'heatmap-cell-low';
+    if (value < 50) return 'heatmap-cell-medium';
+    if (value < 75) return 'heatmap-cell-high';
+    return 'heatmap-cell-very-high';
+>>>>>>> milestone-6
   };
 
   const getIntensityLevel = (value) => {
@@ -476,6 +642,7 @@ function ActivityHeatmap() {
   };
 
   return (
+<<<<<<< HEAD
     <div className="bg-white rounded-lg shadow">
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between">
@@ -486,19 +653,38 @@ function ActivityHeatmap() {
             <div>
               <h2 className="text-xl font-semibold text-gray-900">Activity Heatmap</h2>
               <p className="text-sm text-gray-500">User engagement over the last 12 weeks</p>
+=======
+    <div className="heatmap-card">
+      <div className="heatmap-header">
+        <div className="heatmap-header-content">
+          <div className="heatmap-title-wrapper">
+            <div className="heatmap-icon-wrapper">
+              <Activity className="heatmap-icon" />
+            </div>
+            <div>
+              <h2 className="heatmap-title">Activity Heatmap</h2>
+              <p className="heatmap-subtitle">User engagement over the last 12 weeks</p>
+>>>>>>> milestone-6
             </div>
           </div>
           <button
             onClick={() => refetch()}
             disabled={isLoading || isFetching}
+<<<<<<< HEAD
             className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
+=======
+            className="refresh-button"
+          >
+            <RefreshCw className={isFetching ? "refresh-icon-spinning" : "refresh-icon"} />
+>>>>>>> milestone-6
             Refresh
           </button>
         </div>
       </div>
 
+<<<<<<< HEAD
       <div className="p-6">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-12">
@@ -517,10 +703,28 @@ function ActivityHeatmap() {
               className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
+=======
+      <div className="heatmap-content">
+        {isLoading ? (
+          <div className="heatmap-loading">
+            <Loader2 className="loading-spinner-green" />
+            <p className="loading-text">Loading activity data...</p>
+          </div>
+        ) : isError ? (
+          <div className="heatmap-error">
+            <div className="heatmap-error-icon-wrapper">
+              <AlertCircle className="heatmap-error-icon" />
+            </div>
+            <h3 className="heatmap-error-title">Failed to Load Activity Data</h3>
+            <p className="heatmap-error-message">{error.message}</p>
+            <button onClick={() => refetch()} className="heatmap-retry-button">
+              <RefreshCw className="retry-icon" />
+>>>>>>> milestone-6
               Try Again
             </button>
           </div>
         ) : (
+<<<<<<< HEAD
           <div className="space-y-6">
             <div className="overflow-x-auto">
               <div className="inline-block min-w-full">
@@ -529,15 +733,32 @@ function ActivityHeatmap() {
                     <div className="h-6"></div>
                     {activityData.days.map((day, idx) => (
                       <div key={idx} className="h-4 flex items-center text-xs text-gray-600 font-medium">
+=======
+          <div className="heatmap-wrapper">
+            <div className="heatmap-scroll-container">
+              <div className="heatmap-grid-wrapper">
+                <div className="heatmap-grid-container">
+                  <div className="heatmap-day-labels">
+                    <div className="heatmap-spacer"></div>
+                    {activityData.days.map((day, idx) => (
+                      <div key={idx} className="heatmap-day-label">
+>>>>>>> milestone-6
                         {day}
                       </div>
                     ))}
                   </div>
 
+<<<<<<< HEAD
                   <div className="flex gap-1">
                     {Array.from({ length: activityData.weeks }).map((_, weekIdx) => (
                       <div key={weekIdx} className="flex flex-col gap-1">
                         <div className="h-6 flex items-center justify-center text-xs text-gray-500">
+=======
+                  <div className="heatmap-grid">
+                    {Array.from({ length: activityData.weeks }).map((_, weekIdx) => (
+                      <div key={weekIdx} className="heatmap-week-column">
+                        <div className="heatmap-week-label">
+>>>>>>> milestone-6
                           W{weekIdx + 1}
                         </div>
                         {activityData.days.map((_, dayIdx) => {
@@ -547,7 +768,11 @@ function ActivityHeatmap() {
                           return (
                             <div
                               key={`${weekIdx}-${dayIdx}`}
+<<<<<<< HEAD
                               className={`w-8 h-4 rounded-sm cursor-pointer transition-all hover:ring-2 hover:ring-blue-500 hover:scale-110 ${getColorClass(cellData?.value || 0)}`}
+=======
+                              className={`heatmap-cell ${getColorClass(cellData?.value || 0)}`}
+>>>>>>> milestone-6
                               onMouseEnter={() => setHoveredCell(cellData)}
                               onMouseLeave={() => setHoveredCell(null)}
                               title={`${cellData?.dayName}, Week ${weekIdx + 1}: ${cellData?.value || 0} activities`}
@@ -562,14 +787,21 @@ function ActivityHeatmap() {
             </div>
 
             {hoveredCell && (
+<<<<<<< HEAD
               <div className="bg-gray-800 text-white px-4 py-2 rounded-lg text-sm">
                 <div className="font-semibold">{hoveredCell.dayName}, Week {hoveredCell.week + 1}</div>
                 <div className="text-gray-300">
+=======
+              <div className="heatmap-tooltip">
+                <div className="heatmap-tooltip-title">{hoveredCell.dayName}, Week {hoveredCell.week + 1}</div>
+                <div className="heatmap-tooltip-content">
+>>>>>>> milestone-6
                   {hoveredCell.value} activities · {getIntensityLevel(hoveredCell.value)} intensity
                 </div>
               </div>
             )}
 
+<<<<<<< HEAD
             <div className="flex items-center justify-between pt-4 border-t border-gray-200">
               <div className="text-sm text-gray-600">Activity Level:</div>
               <div className="flex items-center gap-2">
@@ -603,6 +835,41 @@ function ActivityHeatmap() {
                   {Math.max(...activityData.data.map(d => d.value))}
                 </div>
                 <div className="text-sm text-gray-500">Peak Activity</div>
+=======
+            <div className="heatmap-legend-wrapper">
+              <div className="heatmap-legend-label">Activity Level:</div>
+              <div className="heatmap-legend">
+                <span className="heatmap-legend-text">Low</span>
+                <div className="heatmap-legend-colors">
+                  <div className="heatmap-legend-color heatmap-legend-none"></div>
+                  <div className="heatmap-legend-color heatmap-legend-low"></div>
+                  <div className="heatmap-legend-color heatmap-legend-medium"></div>
+                  <div className="heatmap-legend-color heatmap-legend-high"></div>
+                  <div className="heatmap-legend-color heatmap-legend-very-high"></div>
+                </div>
+                <span className="heatmap-legend-text">High</span>
+              </div>
+            </div>
+
+            <div className="heatmap-stats">
+              <div className="heatmap-stat">
+                <div className="heatmap-stat-value">
+                  {activityData.data.reduce((sum, d) => sum + d.value, 0)}
+                </div>
+                <div className="heatmap-stat-label">Total Activities</div>
+              </div>
+              <div className="heatmap-stat">
+                <div className="heatmap-stat-value">
+                  {Math.round(activityData.data.reduce((sum, d) => sum + d.value, 0) / activityData.data.length)}
+                </div>
+                <div className="heatmap-stat-label">Daily Average</div>
+              </div>
+              <div className="heatmap-stat">
+                <div className="heatmap-stat-value">
+                  {Math.max(...activityData.data.map(d => d.value))}
+                </div>
+                <div className="heatmap-stat-label">Peak Activity</div>
+>>>>>>> milestone-6
               </div>
             </div>
           </div>
@@ -616,6 +883,7 @@ function UsersTab() {
   const { data: users = [], isLoading, isError, error, refetch, isFetching } = useUsers();
 
   return (
+<<<<<<< HEAD
     <div className="bg-white rounded-lg shadow">
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between">
@@ -626,20 +894,42 @@ function UsersTab() {
             className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
+=======
+    <div className="users-tab">
+      <div className="users-header">
+        <div className="users-header-content">
+          <h2 className="users-title">Users</h2>
+          <button
+            onClick={() => refetch()}
+            disabled={isLoading || isFetching}
+            className="refresh-button"
+          >
+            <RefreshCw className={isFetching ? "refresh-icon-spinning" : "refresh-icon"} />
+>>>>>>> milestone-6
             Refresh
           </button>
         </div>
       </div>
 
+<<<<<<< HEAD
       <div className="p-6">
+=======
+      <div className="users-content">
+>>>>>>> milestone-6
         {isLoading ? (
           <LoadingState />
         ) : isError ? (
           <ErrorState error={error.message} onRetry={refetch} />
         ) : users.length === 0 ? (
+<<<<<<< HEAD
           <div className="text-center py-12 text-gray-500">No users found</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+=======
+          <div className="users-empty">No users found</div>
+        ) : (
+          <div className="users-grid">
+>>>>>>> milestone-6
             {users.map((user) => (
               <UserCard key={user.id} user={user} />
             ))}
@@ -652,6 +942,7 @@ function UsersTab() {
 
 function TabButton({ active, icon: Icon, label, onClick }) {
   return (
+<<<<<<< HEAD
     <button
       onClick={onClick}
       className={`flex items-center gap-2 px-6 py-3 font-medium transition-all border-b-2 ${
@@ -661,6 +952,10 @@ function TabButton({ active, icon: Icon, label, onClick }) {
       }`}
     >
       <Icon className="w-5 h-5" />
+=======
+    <button onClick={onClick} className={active ? "tab-button tab-button-active" : "tab-button"}>
+      <Icon className="tab-icon" />
+>>>>>>> milestone-6
       {label}
     </button>
   );
@@ -672,6 +967,7 @@ function Dashboard() {
   const [activeTab, setActiveTab] = useState('overview');
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
         <div className="max-w-6xl mx-auto px-6">
@@ -692,12 +988,35 @@ function Dashboard() {
                 className="flex items-center gap-2 px-4 py-2 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
               >
                 <LogOut className="w-4 h-4" />
+=======
+    <div className="dashboard">
+      <div className="dashboard-header">
+        <div className="dashboard-header-container">
+          <div className="dashboard-header-content">
+            <div>
+              <h1 className="dashboard-title">User Dashboard</h1>
+              <p className="dashboard-subtitle">Welcome back, {user?.name || 'User'}</p>
+            </div>
+            <div className="dashboard-header-actions">
+              {isFetching && !isLoading && (
+                <div className="sync-indicator">
+                  <Loader2 className="sync-spinner" />
+                  <span>Syncing data...</span>
+                </div>
+              )}
+              <button onClick={logout} className="logout-button">
+                <LogOut className="logout-icon" />
+>>>>>>> milestone-6
                 Logout
               </button>
             </div>
           </div>
 
+<<<<<<< HEAD
           <div className="flex gap-2 -mb-px overflow-x-auto">
+=======
+          <div className="tabs-container">
+>>>>>>> milestone-6
             <TabButton active={activeTab === 'overview'} icon={BarChart3} label="Overview" onClick={() => setActiveTab('overview')} />
             <TabButton active={activeTab === 'sales'} icon={TrendingUp} label="Sales" onClick={() => setActiveTab('sales')} />
             <TabButton active={activeTab === 'activity'} icon={Activity} label="Activity" onClick={() => setActiveTab('activity')} />
@@ -706,11 +1025,19 @@ function Dashboard() {
         </div>
       </div>
 
+<<<<<<< HEAD
       <div className="max-w-6xl mx-auto p-6">
         {activeTab === 'overview' && (
           <div>
             <DashboardStats userCount={users.length} loading={isLoading} isFetching={isFetching} dataUpdatedAt={dataUpdatedAt} />
             <div className="grid grid-cols-1 gap-6">
+=======
+      <div className="dashboard-content">
+        {activeTab === 'overview' && (
+          <div>
+            <DashboardStats userCount={users.length} loading={isLoading} isFetching={isFetching} dataUpdatedAt={dataUpdatedAt} />
+            <div className="dashboard-sections">
+>>>>>>> milestone-6
               <SalesReport />
               <ActivityHeatmap />
               <UsersTab />
@@ -738,5 +1065,9 @@ export default function App() {
 function AuthWrapper() {
   const { isAuthenticated } = useAuth();
   return isAuthenticated ? <Dashboard /> : <LoginPage />;
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> milestone-6
