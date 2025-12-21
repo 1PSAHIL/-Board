@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { Users, AlertCircle, Loader2, RefreshCw, CheckCircle, LogOut, Lock, TrendingUp, BarChart3, UserCircle, Activity } from 'lucide-react';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { Line } from 'react-chartjs-2';
